@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+{% block title %}Daftar Transaksi - Laundry Cloud{% endblock %}
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-12 d-flex justify-content-between align-items-center flex-wrap gap-3">
+        <div>
+            <h1 class="h3 fw-bold text-slate-800 m-0">Transaksi Laundry</h1>
+            <p class="text-muted m-0">Pantau dan kelola seluruh transaksi laundry cloud.</p>
+        </div>
+        <a href="{{ url_for('transaksi_tambah') }}" class="btn btn-primary-custom px-4 py-2">
+            <i class="bi bi-plus-circle-fill me-2"></i> Tambah Transaksi
+        </a>
+    </div>
+</div>
+
+<!-- Table Card -->
+<div class="card card-custom">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-custom table-hover align-middle">
+                <thead>
+                    <tr>
+                        <th style="width: 80px;">ID</th>
+                        <th>Pelanggan</th>
+                        <th>Tanggal Masuk</th>
+                        <th>Berat (Kg)</th>
+                        <th>Harga / Kg</th>
+                        <th>Total Bayar</th>
+                        <th>Status</th>
+                        <th style="width: 150px;" class="text-center">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if transaksi %}
+                        {% for t in transaksi %}
+                        <tr>
+                            <td><span class="fw-semibold text-primary">#{{ t.id }}</span></td>
+                            <td>
+                                <span class="fw-bold d-block text-dark">{{ t.pelanggan_nama }}</span>
+                                <small class="text-muted">Pelanggan ID: #{{ t.pelanggan_id }}</small>
+                            </td>
+                            <td>
+                                <i class="bi bi-calendar-event text-muted me-1"></i>
+                                {% if t.tanggal_masuk is string %}
+                                    {{ t.tanggal_masuk }}
+                                {% else %}
+                                    {{ t.tanggal_masuk.strftime('%Y-%m-%d %H:%M') }}
+                                {% endif %}
+                            </td>
+                            <td><span class="fw-semibold">{{ t.berat }} kg</span></td>
+                            <td>Rp {{ "{:,.0f}".format(t.harga_per_kg).replace(",", ".") }}</td>
+                            <td><strong class="text-primary">Rp {{ "{:,.0f}".format(t.total).replace(",", ".") }}</strong></td>
+                            <td>
+                                {% if t.status == 'Diproses' %}
+                                    <span class="badge-custom badge-diproses"><i class="bi bi-hourglass-split me-1"></i> {{ t.status }}</span>
+                                {% elif t.status == 'Selesai' %}
+                                    <span class="badge-custom badge-selesai"><i class="bi bi-check2-circle me-1"></i> {{ t.status }}</span>
+                                {% else %}
+                                    <span class="badge-custom badge-diambil"><i class="bi bi-box-seam me-1"></i> {{ t.status }}</span>
+                                {% endif %}
+                            </td>
+                            <td class="text-center">
+                                <div class="d-flex justify-content-center gap-2">
+                                    <a href="{{ url_for('transaksi_edit', id=t.id) }}" class="btn btn-sm btn-outline-warning" title="Edit">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </a>
+                                    
+                                    <!-- HANYA ADMIN YANG DAPAT MELIHAT TOMBOL HAPUS -->
+                                    {% if session.get('role') == 'Admin' %}
+                                    <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ t.id }}" title="Hapus">
+                                        <i class="bi bi-trash-fill"></i>
+                                    </button>
+                                    {% endif %}
+                                </div>
+
+                                <!-- HANYA ADMIN YANG MEMILIKI MODAL KONFIRMASI HAPUS INI -->
+                                {% if session.get('role') == 'Admin' %}
+                                <!-- Modal Hapus -->
+                                <div class="modal fade" id="deleteModal{{ t.id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ t.id }}" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content border-0 shadow">
+                                            <div class="modal-header bg-danger text-white border-0">
+                                                <h5 class="modal-title fw-bold" id="deleteModalLabel{{ t.id }}"><i class="bi bi-exclamation-triangle-fill me-2"></i> Konfirmasi Hapus</h5>
+                                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body text-start p-4">
+                                                Apakah Anda yakin ingin menghapus transaksi <strong>#{{ t.id }}</strong> milik <strong>{{ t.pelanggan_nama }}</strong>?
+                                                <br>
+                                                Tindakan ini tidak dapat dibatalkan.
+                                            </div>
+                                            <div class="modal-footer border-0 bg-light">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                                                <form action="{{ url_for('transaksi_hapus', id=t.id) }}" method="POST" class="d-inline">
+                                                    <button type="submit" class="btn btn-danger px-4">Ya, Hapus</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endif %}
+
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="8" class="text-center py-5 text-muted">
+                                <i class="bi bi-receipt-cutoff fs-1 d-block mb-2"></i>
+                                Belum ada data transaksi tercatat.
+                            </td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

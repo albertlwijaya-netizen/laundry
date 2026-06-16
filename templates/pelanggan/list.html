@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+{% block title %}Daftar Pelanggan - Laundry Cloud{% endblock %}
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-12 d-flex justify-content-between align-items-center flex-wrap gap-3">
+        <div>
+            <h1 class="h3 fw-bold text-slate-800 m-0">Daftar Pelanggan</h1>
+            <p class="text-muted m-0">Kelola informasi data pelanggan laundry.</p>
+        </div>
+        <a href="{{ url_for('pelanggan_tambah') }}" class="btn btn-primary-custom px-4 py-2">
+            <i class="bi bi-person-plus-fill me-2"></i> Tambah Pelanggan
+        </a>
+    </div>
+</div>
+
+<!-- Search and Table -->
+<div class="card card-custom">
+    <div class="card-body p-0">
+        <!-- Search Bar -->
+        <div class="p-3 border-bottom bg-light">
+            <form method="GET" action="{{ url_for('pelanggan_index') }}" class="row g-2 justify-content-end">
+                <div class="col-md-4">
+                    <div class="input-group">
+                        <span class="input-group-text bg-white border-end-0 text-muted"><i class="bi bi-search"></i></span>
+                        <input type="text" class="form-control border-start-0" name="search" value="{{ search }}" placeholder="Cari nama pelanggan...">
+                        {% if search %}
+                        <a href="{{ url_for('pelanggan_index') }}" class="btn btn-outline-secondary" type="button"><i class="bi bi-x"></i></a>
+                        {% endif %}
+                        <button class="btn btn-primary-custom" type="submit">Cari</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-custom table-hover align-middle">
+                <thead>
+                    <tr>
+                        <th style="width: 80px;">ID</th>
+                        <th>Nama</th>
+                        <th>No. Handphone</th>
+                        <th>Alamat</th>
+                        <th style="width: 150px;" class="text-center">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if pelanggan %}
+                        {% for p in pelanggan %}
+                        <tr>
+                            <td><span class="fw-semibold text-primary">#{{ p.id }}</span></td>
+                            <td><span class="fw-bold">{{ p.nama }}</span></td>
+                            <td><i class="bi bi-telephone text-muted me-1"></i> {{ p.no_hp }}</td>
+                            <td><span class="text-wrap d-inline-block" style="max-width: 300px;">{{ p.alamat }}</span></td>
+                            <td class="text-center">
+                                <div class="d-flex justify-content-center gap-2">
+                                    <a href="{{ url_for('pelanggan_edit', id=p.id) }}" class="btn btn-sm btn-outline-warning" title="Edit">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </a>
+                                    
+                                    <!-- HANYA ADMIN YANG DAPAT MELIHAT TOMBOL HAPUS -->
+                                    {% if session.get('role') == 'Admin' %}
+                                    <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ p.id }}" title="Hapus">
+                                        <i class="bi bi-trash-fill"></i>
+                                    </button>
+                                    {% endif %}
+                                </div>
+
+                                <!-- HANYA ADMIN YANG MEMILIKI MODAL KONFIRMASI HAPUS INI -->
+                                {% if session.get('role') == 'Admin' %}
+                                <!-- Modal Hapus -->
+                                <div class="modal fade" id="deleteModal{{ p.id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ p.id }}" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content border-0 shadow">
+                                            <div class="modal-header bg-danger text-white border-0">
+                                                <h5 class="modal-title fw-bold" id="deleteModalLabel{{ p.id }}"><i class="bi bi-exclamation-triangle-fill me-2"></i> Konfirmasi Hapus</h5>
+                                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body text-start p-4">
+                                                Apakah Anda yakin ingin menghapus pelanggan <strong>{{ p.nama }}</strong>? 
+                                                <br>
+                                                <small class="text-danger">*Seluruh transaksi terkait pelanggan ini juga akan terhapus otomatis.</small>
+                                            </div>
+                                            <div class="modal-footer border-0 bg-light">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                                                <form action="{{ url_for('pelanggan_hapus', id=p.id) }}" method="POST" class="d-inline">
+                                                    <button type="submit" class="btn btn-danger px-4">Ya, Hapus</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endif %}
+
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="5" class="text-center py-5 text-muted">
+                                <i class="bi bi-person-x fs-1 d-block mb-2"></i>
+                                Tidak ada data pelanggan ditemukan.
+                            </td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

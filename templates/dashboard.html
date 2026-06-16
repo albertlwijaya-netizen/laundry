@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard - Laundry Cloud{% endblock %}
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-12 d-flex justify-content-between align-items-center">
+        <div>
+            <h1 class="h3 fw-bold text-dark mb-1">Dashboard</h1>
+            <p class="text-muted mb-0">Selamat bekerja, <strong>{{ session.get('nama') }}</strong> ({{ session.get('role') }}).</p>
+        </div>
+        <div class="text-end text-muted d-none d-md-block">
+            <small class="d-block fw-semibold"><i class="bi bi-clock me-1 text-primary"></i> Waktu Server</small>
+            <span>{{ datetime_now }}</span>
+        </div>
+    </div>
+</div>
+
+<!-- Statistik Row -->
+<div class="row g-4 mb-5">
+    <div class="col-md-3">
+        <div class="card card-custom stat-card-indigo p-3">
+            <div class="card-body p-2 d-flex justify-content-between align-items-center">
+                <div>
+                    <div class="stat-label">Pelanggan</div>
+                    <div class="stat-value mt-1">{{ stats.total_pelanggan }}</div>
+                </div>
+                <div class="rounded-circle bg-light p-3 text-primary">
+                    <i class="bi bi-people fs-3"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card card-custom stat-card-cyan p-3">
+            <div class="card-body p-2 d-flex justify-content-between align-items-center">
+                <div>
+                    <div class="stat-label">Transaksi</div>
+                    <div class="stat-value mt-1">{{ stats.total_transaksi }}</div>
+                </div>
+                <div class="rounded-circle bg-light p-3 text-info">
+                    <i class="bi bi-receipt fs-3"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card card-custom stat-card-warning p-3">
+            <div class="card-body p-2 d-flex justify-content-between align-items-center">
+                <div>
+                    <div class="stat-label">Diproses</div>
+                    <div class="stat-value mt-1">{{ stats.diproses }}</div>
+                </div>
+                <div class="rounded-circle bg-light p-3 text-warning">
+                    <i class="bi bi-hourglass-split fs-3"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card card-custom stat-card-success p-3">
+            <div class="card-body p-2 d-flex justify-content-between align-items-center">
+                <div>
+                    <div class="stat-label">Selesai</div>
+                    <div class="stat-value mt-1">{{ stats.selesai }}</div>
+                </div>
+                <div class="rounded-circle bg-light p-3 text-success">
+                    <i class="bi bi-check-circle fs-3"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Pintasan Cepat & Informasi Server -->
+<div class="row">
+    <div class="col-md-6 mb-4">
+        <div class="card card-custom h-100 p-4">
+            <h5 class="fw-bold mb-3"><i class="bi bi-lightning-fill text-warning me-1"></i> Akses Cepat</h5>
+            <div class="row g-3">
+                <div class="col-6">
+                    <a href="{{ url_for('pelanggan_tambah') }}" class="btn btn-outline-primary w-100 py-3 rounded-3">
+                        <i class="bi bi-person-plus d-block fs-3 mb-1"></i> Pelanggan Baru
+                    </a>
+                </div>
+                <div class="col-6">
+                    <a href="{{ url_for('transaksi_tambah') }}" class="btn btn-outline-success w-100 py-3 rounded-3">
+                        <i class="bi bi-plus-circle d-block fs-3 mb-1"></i> Transaksi Baru
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+   
+</div>
+{% endblock %}

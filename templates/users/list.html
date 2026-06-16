@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% block title %}Kelola Pengguna - Laundry Cloud{% endblock %}
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-12 d-flex justify-content-between align-items-center flex-wrap gap-2">
+        <div>
+            <h1 class="h3 fw-bold text-dark m-0">Manajemen Pengguna</h1>
+            <p class="text-muted m-0">Kelola akun staf (Admin dan Petugas) yang memiliki akses masuk sistem.</p>
+        </div>
+        <a href="{{ url_for('users_tambah') }}" class="btn btn-primary-custom px-4"><i class="bi bi-person-plus-fill me-1"></i> Tambah Pengguna</a>
+    </div>
+</div>
+
+<div class="card card-custom">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-custom table-hover align-middle">
+                <thead>
+                    <tr>
+                        <th style="width: 80px;">ID</th>
+                        <th>Nama Pengguna</th>
+                        <th>Username</th>
+                        <th>Role / Wewenang</th>
+                        <th style="width: 150px;" class="text-center">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if users %}
+                        {% for u in users %}
+                        <tr>
+                            <td><span class="fw-semibold text-primary">#{{ u.id }}</span></td>
+                            <td><span class="fw-bold text-dark">{{ u.nama }}</span></td>
+                            <td><code>{{ u.username }}</code></td>
+                            <td>
+                                {% if u.role == 'Admin' %}
+                                    <span class="badge bg-primary px-3 py-2"><i class="bi bi-shield-lock me-1"></i> {{ u.role }}</span>
+                                {% else %}
+                                    <span class="badge bg-secondary px-3 py-2"><i class="bi bi-person me-1"></i> {{ u.role }}</span>
+                                {% endif %}
+                            </td>
+                            <td class="text-center">
+                                <div class="d-flex justify-content-center gap-1">
+                                    <a href="{{ url_for('users_edit', id=u.id) }}" class="btn btn-sm btn-outline-warning"><i class="bi bi-pencil-square"></i></a>
+                                    
+                                    <!-- Jangan tampilkan tombol hapus jika user merujuk ke dirinya sendiri yang sedang login -->
+                                    {% if u.id != session.get('user_id') %}
+                                    <button class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ u.id }}"><i class="bi bi-trash-fill"></i></button>
+                                    {% endif %}
+                                </div>
+
+                                <!-- Modal Hapus User -->
+                                <div class="modal fade" id="deleteModal{{ u.id }}" tabindex="-1" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content border-0">
+                                            <div class="modal-header bg-danger text-white border-0">
+                                                <h5 class="modal-title fw-bold"><i class="bi bi-exclamation-triangle-fill me-2"></i> Konfirmasi Hapus</h5>
+                                                <button type="button" class="btn-close btn-close-white" data-bs-modal="hide" data-bs-dismiss="modal"></button>
+                                            </div>
+                                            <div class="modal-body text-start p-4">
+                                                Hapus akun pengguna <strong>{{ u.nama }}</strong>? Pengguna ini tidak akan bisa login lagi ke sistem.
+                                            </div>
+                                            <div class="modal-footer border-0 bg-light">
+                                                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Batal</button>
+                                                <form action="{{ url_for('users_hapus', id=u.id) }}" method="POST" class="d-inline">
+                                                    <button type="submit" class="btn btn-danger btn-sm px-3">Ya, Hapus</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="5" class="text-center py-5 text-muted">
+                                Tidak ada data pengguna.
+                            </td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

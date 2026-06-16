@@ -1,0 +1,163 @@
+/* Gaya CSS Kustom untuk Panel Informasi Modern */
+:root {
+    --primary-color: #4f46e5;
+    --primary-dark: #4338ca;
+    --secondary-color: #06b6d4;
+    --bg-light: #f8fafc;
+    --dark-text: #0f172a;
+    --muted-text: #64748b;
+    --card-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+    --border-radius-lg: 14px;
+    --border-radius-md: 8px;
+}
+
+body {
+    background-color: var(--bg-light);
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    color: var(--dark-text);
+}
+
+/* Kustomisasi Navbar */
+.navbar-custom {
+    background-color: #ffffff;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.navbar-custom .navbar-brand {
+    font-weight: 800;
+    color: var(--primary-color);
+    letter-spacing: -0.5px;
+}
+
+.navbar-custom .nav-link {
+    color: var(--muted-text);
+    font-weight: 500;
+    transition: color 0.2s ease-in-out;
+}
+
+.navbar-custom .nav-link:hover, .navbar-custom .nav-link.active {
+    color: var(--primary-color);
+}
+
+/* Glassmorphism di halaman login */
+.login-bg {
+    background: linear-gradient(135deg, #e0e7ff 0%, #cffafe 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+.login-card {
+    border: none;
+    border-radius: var(--border-radius-lg);
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.login-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.login-header h2 {
+    font-weight: 800;
+    color: var(--primary-color);
+}
+
+/* Desain Kartu Ringkasan */
+.card-custom {
+    border: none;
+    border-radius: var(--border-radius-lg);
+    background-color: #ffffff;
+    box-shadow: var(--card-shadow);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card-custom:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.08);
+}
+
+/* Warna Pembeda Statistik */
+.stat-card-indigo { border-left: 5px solid var(--primary-color); }
+.stat-card-cyan { border-left: 5px solid var(--secondary-color); }
+.stat-card-warning { border-left: 5px solid #f59e0b; }
+.stat-card-success { border-left: 5px solid #10b981; }
+
+.stat-label {
+    font-size: 0.85rem;
+    color: var(--muted-text);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.stat-value {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--dark-text);
+}
+
+/* Tabel UI Modern */
+.table-responsive {
+    border-radius: var(--border-radius-md);
+    background: white;
+}
+
+.table-custom {
+    margin-bottom: 0;
+}
+
+.table-custom th {
+    background-color: #f1f5f9;
+    color: var(--muted-text);
+    text-transform: uppercase;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    padding: 1rem 1.5rem;
+    border: none;
+}
+
+.table-custom td {
+    padding: 1.1rem 1.5rem;
+    vertical-align: middle;
+    color: #334155;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+/* Status Badge */
+.badge-custom {
+    padding: 0.4em 0.9em;
+    font-weight: 600;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+}
+
+.badge-diproses { background-color: #fef3c7; color: #d97706; }
+.badge-selesai { background-color: #d1fae5; color: #059669; }
+.badge-diambil { background-color: #e0f2fe; color: #0284c7; }
+
+/* Tombol Kustom */
+.btn-primary-custom {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: #ffffff;
+    font-weight: 500;
+    border-radius: var(--border-radius-md);
+    transition: background-color 0.2s;
+}
+
+.btn-primary-custom:hover {
+    background-color: var(--primary-dark);
+    border-color: var(--primary-dark);
+    color: #ffffff;
+}
